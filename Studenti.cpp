@@ -6,6 +6,98 @@
 
 using namespace std;
 
+//broj na studenti vo strukturata
+int BROJ_ZAPISI = 0;
+
+struct SPISOK
+{
+	int brojIndeks;
+    char ime[30];
+	char prezime[30];	
+	char godinaStudii[15];
+	float prosek;	
+};
+
+typedef struct SPISOK STUDENTI;
+
+void snimiStudenti(STUDENTI *std, int n)
+{
+   ofstream izlez;
+   izlez.open("studenti.txt", ios_base::app | ios_base::out ); 
+   
+   if(!izlez)
+   {        
+        cout << "Greska! Ne mozi da se procesira fjalot." << endl;
+        exit(1);
+   }
+   
+   for (int i = 0; i < n; i++)
+   {   
+       izlez<<std[i].brojIndeks<<";";    
+       izlez<<std[i].ime<<";"; 
+       izlez<<std[i].prezime<<";";       
+       izlez<<std[i].godinaStudii<<";"; 
+       izlez<<std[i].prosek;
+      
+       izlez<<endl;
+       
+       izlez.flush();
+   }
+   izlez.close();
+}
+
+void sortirajSpisok(STUDENTI **pStudent)
+{
+	int temp;
+	
+    for(int i=0;i<BROJ_ZAPISI;++i)
+    {
+		for(int j=0;j<BROJ_ZAPISI-1;++j)
+        {
+			if(pStudent[j]->brojIndeks > pStudent[j+1]->brojIndeks)
+            {
+				temp = pStudent[j]->brojIndeks;
+				pStudent[j]->brojIndeks = pStudent[j+1]->brojIndeks;
+				pStudent[j+1]->brojIndeks = temp;
+			}
+		}
+	}
+}
+
+int linearnoPrebaruvanjeInteger(STUDENTI **a, int prv, int posleden, int kluc)
+{      
+   for (int i = prv; i <posleden; i++) 
+   {      
+        if (kluc == a[i]->brojIndeks) 
+        {
+            return i;
+        }      
+   }
+   return -1; 
+}
+
+int linearnoPrebaruvanjeString(STUDENTI **a, int prv, int posleden, int kolona, char kluc[])
+{      
+   for (int i = prv; i <posleden; i++) 
+   {
+       if (kolona == 2)
+       {
+             if (strcmp(kluc,a[i]->ime)==0) 
+             {
+                 return i;
+             }
+       }
+       if (kolona == 3)
+       {
+             if (strcmp(kluc,a[i]->prezime)==0) 
+             {
+                 return i;
+             }
+       }      
+   }
+   return -1; 
+}
+
 
 void pecatiStudent(STUDENTI **pStudent, int n)
 {     
