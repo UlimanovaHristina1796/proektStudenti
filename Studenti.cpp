@@ -7,6 +7,148 @@
 using namespace std;
 
 
+void pecatiStudent(STUDENTI **pStudent, int n)
+{     
+         cout<<"STUDENT #"<<n<<endl;
+         
+         cout<<"   Broj Indeks: "<<pStudent[n]->brojIndeks<<endl;
+         cout<<"           Ime: "<<pStudent[n]->ime<<endl;
+         cout<<"       Prezime: "<<pStudent[n]->prezime<<endl;
+         cout<<" Godina Studii: "<<pStudent[n]->godinaStudii<<endl;
+         cout<<"        Prosek: "<<pStudent[n]->prosek<<endl;
+         
+         cout<<endl;    
+}
+
+void pronajdiStudent(STUDENTI **pStudent)
+{
+     char izbor ;
+    
+     do{
+          
+        cout<<endl;	
+        cout<<"[1] Prebaraj po Broj na Indeks"<<endl;
+		cout<<"[2] Prebaraj po Ime"<<endl;
+		cout<<"[3] Prebaraj po Prezime"<<endl;				
+        cout<<"[4] Izlez od programa"<<endl;
+		cout<<endl;		
+		
+		int indeks=0;
+		char *naziv = new char[30];
+	
+    	izbor = getchar();
+        int indeksStudent;
+        
+        switch(getchar())
+        {
+			case '1': 
+                 
+                 cout<<"Vnesi Broj na Indeks:"<<endl; cin>>indeks;
+                 indeksStudent = linearnoPrebaruvanjeInteger(pStudent, 0, BROJ_ZAPISI, indeks);
+                 if(indeksStudent>0)
+                    pecatiStudent(pStudent, indeksStudent);
+                 else
+                    cout<<"Ne e pronajden student."<<endl;  
+                                
+                 break;
+                 
+            case '2': 
+                 
+                 cout<<"Vnesi Ime na Student:"; cin>>naziv;
+                 indeksStudent = linearnoPrebaruvanjeString(pStudent, 0, BROJ_ZAPISI, 2, naziv);     
+                 if(indeksStudent>0)
+                    pecatiStudent(pStudent, indeksStudent);
+                 else
+                    cout<<"Ne e pronajden student.";  
+                       
+                 break;
+                 
+            case '3': 
+                 
+                 cout<<"Vnesi Prezime na Student:"; cin>>naziv;
+                 indeksStudent = linearnoPrebaruvanjeString(pStudent, 0, BROJ_ZAPISI, 3, naziv);
+                 if(indeksStudent>0)
+                    pecatiStudent(pStudent, indeksStudent);
+                 else
+                    cout<<"Ne e pronajden student.";  
+                        
+                 break;
+                 
+            case '4': exit(1);	     
+                     
+	     } 
+     }while(getchar()!='4');
+}
+
+void pecatiStudenti(STUDENTI **pStudent, int n)
+{
+    sortirajSpisok(pStudent);
+     
+    for(int i=0; i<n; i++)
+    {
+         cout<<endl;
+         cout<<"STUDENT #"<<i<<endl;
+         
+         cout<<"   Broj Indeks: "<<pStudent[i]->brojIndeks<<endl;
+         cout<<"           Ime: "<<pStudent[i]->ime<<endl;
+         cout<<"       Prezime: "<<pStudent[i]->prezime<<endl;
+         cout<<" Godina Studii: "<<pStudent[i]->godinaStudii<<endl;
+         cout<<"        Prosek: "<<pStudent[i]->prosek<<endl;
+         
+         cout<<endl;
+    } 
+}
+
+STUDENTI **vcitajStudenti()
+{        
+    STUDENTI zapisStudent, **zapisStudentArray = NULL;
+     
+    ifstream vlez;
+    vlez.open("studenti.txt"); 
+    
+    if(!vlez)
+    {
+        cout << "Greska! Ne mozi da se procesira fajlot." << endl;
+        exit(1);    
+    }
+    
+    char zapis[500];  
+    stringstream s;
+
+    while( vlez.getline(zapis, 120) )
+    { 
+            s<<zapis;          
+            
+            s.getline(zapis, 15, ';');
+            zapisStudent.brojIndeks = atoi(zapis);
+            
+            s.getline(zapis, 30, ';');
+            strcpy(zapisStudent.ime, zapis);
+            
+            s.getline(zapis, 30, ';');
+            strcpy(zapisStudent.prezime, zapis);
+            
+            s.getline(zapis, 15, ';');
+            strcpy(zapisStudent.godinaStudii, zapis);
+            
+            s.getline(zapis, 30, ';');
+            zapisStudent.prosek = atof(zapis);
+            
+            s<<"";
+            s.clear();	
+                      
+            if(!vlez) break;//
+            
+            zapisStudentArray  = (STUDENTI **) realloc(zapisStudentArray ,(BROJ_ZAPISI+1) * sizeof(STUDENTI *));
+            zapisStudentArray[BROJ_ZAPISI] = (STUDENTI *) malloc(sizeof(STUDENTI));
+            *zapisStudentArray[BROJ_ZAPISI++] = zapisStudent;           
+            
+    }    
+    vlez.close();
+    
+    return zapisStudentArray;   
+}
+
 
 void vnesiStudenti(STUDENTI *pStudent, int n)
 {
@@ -24,10 +166,10 @@ void vnesiStudenti(STUDENTI *pStudent, int n)
      }    
 }
 
+
 int main(int argc, char *argv[])
 {   
     
-
     system("PAUSE");
     return EXIT_SUCCESS;
 }
